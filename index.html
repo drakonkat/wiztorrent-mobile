@@ -2,10 +2,26 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>WizTorrent</title>
+    
+    <!-- Ionic Core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/core.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/normalize.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/structure.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/typography.css" rel="stylesheet">
+
+    <!-- Ionic Utilities CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/padding.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/float-elements.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/text-alignment.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/text-transformation.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/flex-utils.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/display.css" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -20,7 +36,6 @@
               surfaceHighlight: 'var(--color-surface-highlight)',
               primary: 'var(--color-primary)',
               secondary: 'var(--color-secondary)',
-              // Keep functional colors fixed or adaptable if needed, using standard palette for safety
               danger: '#EF4444', 
             },
             animation: {
@@ -34,38 +49,45 @@
       :root {
         /* Light Theme */
         --color-bg: #ffffff;
-        --color-surface: #f4f6ff; /* Very light tint of blue/purple for card surface */
+        --color-surface: #f4f6ff;
         --color-surface-highlight: #e0e7ff;
         --color-primary: #a7aef0;
         --color-secondary: #a6c0f1;
+        
+        /* Ionic Safe Area Integration */
+        --ion-safe-area-top: env(safe-area-inset-top);
+        --ion-safe-area-bottom: env(safe-area-inset-bottom);
       }
       
       .dark {
         /* Dark Theme */
         --color-bg: #151515;
-        --color-surface: #292929; /* User defined secondary for dark mode used as surface */
+        --color-surface: #292929;
         --color-surface-highlight: #3a3a3a;
         --color-primary: #a7aef0;
         --color-secondary: #292929;
       }
 
+      /* Ionic Variables Overlay for Dark Mode */
+      .dark ion-content {
+        --background: var(--color-bg);
+      }
+      
+      ion-content {
+        --background: var(--color-bg);
+      }
+
       body {
         background-color: var(--color-bg);
-        color: #fff; /* Default text color override in component */
+        color: #fff;
         transition: background-color 0.3s ease;
         -webkit-tap-highlight-color: transparent;
       }
       
-      /* Custom Scrollbar */
+      /* Hide Scrollbar for cleaner mobile look */
       ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
+        width: 0px;
         background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--color-surface-highlight);
-        border-radius: 3px;
       }
     </style>
   <script type="importmap">
@@ -78,7 +100,11 @@
     "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?deps=react@18.3.1",
     "lucide-react": "https://esm.sh/lucide-react@0.344.0?deps=react@18.3.1",
     "mobx": "https://esm.sh/mobx@6.12.0",
-    "mobx-react-lite": "https://esm.sh/mobx-react-lite@4.0.7?deps=react@18.3.1,mobx@6.12.0"
+    "mobx-react-lite": "https://esm.sh/mobx-react-lite@4.0.7?deps=react@18.3.1,mobx@6.12.0",
+    "@ionic/react": "https://esm.sh/@ionic/react@8.0.0?deps=react@18.3.1,react-dom@18.3.1",
+    "ionicons": "https://esm.sh/ionicons@7.0.0",
+    "ionicons/icons": "https://esm.sh/ionicons@7.0.0/icons",
+    "ionicons/": "https://esm.sh/ionicons@^8.0.13/"
   }
 }
 </script>

@@ -1,0 +1,8 @@
+{
+  "appId": "com.wiztorrent.app",
+  "appName": "WizTorrent",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  }
+}

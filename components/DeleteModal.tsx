@@ -31,7 +31,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, torrentName, onClose,
       {/* Backdrop */}
       <div 
         className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
-        onClick={onClose}
+        onClick={() => onClose()}
       />
 
       {/* Modal Card */}
@@ -67,14 +67,14 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, torrentName, onClose,
             <Button 
               variant="secondary" 
               fullWidth 
-              onClick={onClose}
+              onClick={() => onClose()}
             >
               {t.cancel}
             </Button>
             <Button 
               variant="danger" 
               fullWidth 
-              onClick={onConfirm}
+              onClick={() => onConfirm()}
               className="bg-red-500 hover:bg-red-600 !text-white shadow-lg shadow-red-500/20 border-0"
             >
               {t.confirm}

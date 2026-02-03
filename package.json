@@ -1,24 +1,32 @@
 {
   "name": "wiztorrent-mobile",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "description": "High-fidelity mobile Torrent Client UI",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "npx serve .",
+    "build": "echo 'No build step required for this ESM prototype. Ensure assets are in place.'",
+    "cap:add:android": "npx cap add android",
+    "cap:add:ios": "npx cap add ios",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios",
+    "ionic:serve": "npx serve ."
   },
   "dependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "lucide-react": "0.344.0",
-    "mobx": "6.12.0",
-    "mobx-react-lite": "4.0.7"
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@ionic/react": "^8.0.0",
+    "@ionic/react-router": "^8.0.0",
+    "ionicons": "^7.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "mobx": "^6.12.0",
+    "mobx-react-lite": "^4.0.7",
+    "lucide-react": "^0.344.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "@capacitor/cli": "^6.0.0",
+    "tailwindcss": "^3.4.1"
   }
 }

@@ -2,47 +2,57 @@
 
 A high-fidelity, modern, and responsive user interface for a mobile Torrent Client. This project demonstrates a production-ready UI architecture using React, TypeScript, and Tailwind CSS, focusing on glassmorphism aesthetics and smooth micro-interactions.
 
+Now enhanced with **Ionic Framework** and **Capacitor** for native mobile deployment.
+
 ## 🚀 Tech Stack
 
 - **Framework:** React 18.3.1 (via ES Modules)
+- **Mobile Runtime:** Ionic Framework 8 & Capacitor 6
 - **State Management:** MobX 6 (Reactive state)
 - **Styling:** Tailwind CSS (Utility-first, Dark Mode support)
-- **Icons:** Lucide React
-- **Language:** TypeScript
+- **Icons:** Lucide React & Ionicons
 
 ## 📂 Project Structure
 
-### Core Files
-- **`index.html`**: Application entry point. Handles Tailwind configuration (theme colors, fonts) and ES Module Import Maps.
-  - *Note:* Configured with strict 18.3.1 mappings for React and React-DOM to ensure a singleton instance and prevent rendering errors.
-- **`index.tsx`**: React mounting point.
-- **`App.tsx`**: Main application layout. Handles high-level layout structure and MobX store integration.
-- **`store.ts`**: Centralized state management using MobX. Handles:
-  - Torrent list management.
-  - Theme state (Dark/Light).
-  - Simulation logic (download progress, speed calculation).
-- **`types.ts`**: TypeScript definitions for Torrents, Status enums, and Language types.
-- **`translations.ts`**: Localization dictionary (English, Italian, Russian).
+- **`package.json`**: NPM scripts and dependencies for Native/Android/iOS integration.
+- **`capacitor.config.json`**: Capacitor configuration.
+- **`App.tsx`**: Wrapped in `IonApp` and `IonContent` for Safe Area handling.
 
-### Components (`components/`)
-- **`Header.tsx`**: Top navigation bar with animated language selector and theme toggle.
-- **`TorrentCard.tsx`**: Complex list item displaying torrent status, progress bars with shimmer effects, and control actions.
-- **`AddSheet.tsx`**: Mobile-style bottom sheet for adding torrents via Magnet link or file selection.
-- **`DeleteModal.tsx`**: Backdrop-blurred modal for confirmation actions.
-- **`Button.tsx`**: Reusable button component with variant support (primary, secondary, danger, ghost).
+## 📱 Mobile Development (Ionic/Capacitor)
 
-## ✨ Key Features
+This project is configured to run as a native app on Android or iOS.
 
-- **Reactive State**: Instant UI updates upon state changes (pausing, deleting, language switching) without page reloads.
-- **Adaptive Theme**: Native support for Dark and Light modes with smooth color transitions.
-- **Internationalization**: Full i18n support with dynamic text switching.
-- **Simulated Backend**: The `store.ts` contains logic to simulate download speeds and progress updates to demonstrate UI responsiveness.
-- **Mobile-First UX**: Touch-friendly targets, bottom-sheet interactions, and responsive layout.
+### Prerequisites
+1. Install dependencies: `npm install`
+2. Install Android Studio (for Android) or Xcode (for iOS).
 
-## 🔧 Setup & Running
+### Commands
 
-This project uses ES Modules directly in the browser via `esm.sh`. No build step (Webpack/Vite) is strictly required for previewing, though a local server is recommended to avoid CORS issues.
+- **Sync Native Projects:** 
+  ```bash
+  npm run cap:sync
+  ```
+- **Open Android Studio:**
+  ```bash
+  npm run cap:open:android
+  ```
+- **Open Xcode:**
+  ```bash
+  npm run cap:open:ios
+  ```
+- **Add Platform:**
+  ```bash
+  npm run cap:add:android
+  ```
 
-1. Open the directory in a code editor.
-2. Serve the root directory using a local static server (e.g., VS Code Live Server, `python -m http.server`, or `npx serve`).
-3. Open `index.html` in the browser.
+## 🔧 Setup & Running (Web)
+
+1. Serve the root directory.
+2. Open `index.html`.
+
+*Note:* The `IonHeader` automatically handles the status bar overlap on mobile devices using native Safe Area insets.
+
+## 🐛 Recent Fixes
+- **Language Menu Clipping:** Implemented `createPortal` in `Header.tsx` to render the language dropdown directly into `document.body`. This bypasses the `overflow: hidden` and strict stacking contexts of Ionic's `IonToolbar`, ensuring the menu is always visible on top of the content.
+- **Reactivity Issue:** Wrapped `TorrentCard` component in `observer` to ensure it correctly updates when individual torrent properties (like status or progress) change in the store.
+- **FAB Error:** Replaced the custom HTML floating button in `App.tsx` with `<IonFab>` and `<IonFabButton>`. This resolves the "Converting circular structure to JSON" error caused by improper event handling in the previous implementation and ensures correct Fixed positioning relative to the Ionic content area.

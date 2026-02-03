@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Link, FileUp, Magnet, Plus } from 'lucide-react';
 import Button from './Button';
 import { Language } from '../types';
@@ -11,138 +11,135 @@ interface AddSheetProps {
   lang: Language;
 }
 
-const APP_MODE: 'web' | 'app' = (process.env.REACT_APP_MODE as 'web' | 'app') || 'web';
-
 const AddSheet: React.FC<AddSheetProps> = ({ isOpen, onClose, onAdd, lang }) => {
   const [magnetLink, setMagnetLink] = useState('');
-  const [isClosing, setIsClosing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const t = translations[lang].addSheet;
+  const [isVisible, setIsVisible] = useState(false);
 
-  if (!isOpen) return null;
+  // Handle animation state
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      const timer = setTimeout(() => setIsVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsClosing(false);
-      onClose();
-      setMagnetLink('');
-    }, 300);
-  };
+  if (!isOpen && !isVisible) return null;
 
   const handleAdd = () => {
     if (magnetLink) {
         onAdd(magnetLink);
-        handleClose();
+        setMagnetLink('');
+        onClose();
     }
   };
 
   const handleFileClick = () => {
-    if (APP_MODE === 'app') {
-      console.log('Invoking Native File Picker Bridge...');
-      alert("App Mode: Triggering Native File Picker Bridge");
-    } else {
-      fileInputRef.current?.click();
-    }
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       onAdd(`file|${file.name}`);
-      handleClose();
+      onClose();
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-0 sm:p-4">
-      {/* Backdrop */}
-      <div 
-        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
-        onClick={handleClose}
-      />
+    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center pointer-events-none">
+        {/* Backdrop */}
+        <div 
+            className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 pointer-events-auto ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+            onClick={onClose}
+        />
 
-      {/* Sheet Content */}
-      <div 
-        className={`
-            relative w-full max-w-lg bg-surface border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl ring-1 ring-white/10
-            transform transition-transform duration-300 ease-out
-            ${isClosing ? 'translate-y-full sm:scale-95 sm:opacity-0' : 'translate-y-0 sm:scale-100 sm:opacity-100'}
-        `}
-      >
-        {/* Handle for mobile */}
-        <div className="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-6 sm:hidden" />
-
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <div className="p-1.5 bg-cyan-500/20 rounded-lg text-cyan-400">
-                <Plus size={20} strokeWidth={3} />
-            </div>
-            {t.title}
-          </h2>
-          <button onClick={handleClose} className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-white/5 transition-colors">
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="space-y-6">
-            {/* Option A: Magnet Link */}
-            <div className="space-y-3">
-                <label className="text-sm font-medium text-slate-300 ml-1">{t.magnetLabel}</label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Link size={18} className="text-slate-500" />
+        {/* Sheet Container */}
+        <div 
+            className={`
+                w-full sm:max-w-lg bg-surface dark:bg-[#1e1e1e] 
+                rounded-t-[2rem] sm:rounded-2xl 
+                p-6 pb-10 sm:pb-6
+                shadow-2xl ring-1 ring-white/10
+                transform transition-transform duration-300 cubic-bezier(0.2, 0.8, 0.2, 1) pointer-events-auto
+                ${isOpen ? 'translate-y-0' : 'translate-y-full sm:translate-y-10'}
+            `}
+        >
+            {/* Header */}
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <div className="p-1.5 bg-cyan-500/20 rounded-lg text-cyan-400">
+                        <Plus size={20} strokeWidth={3} />
                     </div>
-                    <input
-                        type="text"
-                        value={magnetLink}
-                        onChange={(e) => setMagnetLink(e.target.value)}
-                        placeholder={t.magnetPlaceholder}
-                        className="block w-full pl-10 pr-3 py-3 bg-background border border-slate-700 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                        autoFocus
-                    />
-                </div>
+                    {t.title}
+                </h2>
+                <button 
+                    onClick={onClose} 
+                    className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-white/5 transition-colors"
+                >
+                    <X size={20} />
+                </button>
             </div>
 
-            <Button 
-                onClick={handleAdd} 
-                disabled={!magnetLink} 
-                fullWidth 
-                icon={<Magnet size={18} />}
-            >
-                {t.startBtn}
-            </Button>
+            <div className="space-y-6">
+                {/* Option A: Magnet Link */}
+                <div className="space-y-3">
+                    <label className="text-sm font-medium text-slate-500 dark:text-slate-300 ml-1">{t.magnetLabel}</label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Link size={18} className="text-slate-500" />
+                        </div>
+                        <input
+                            type="text"
+                            value={magnetLink}
+                            onChange={(e) => setMagnetLink(e.target.value)}
+                            placeholder={t.magnetPlaceholder}
+                            className="block w-full pl-10 pr-3 py-3 bg-white dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                            autoFocus={isOpen} // Only autofocus when open
+                        />
+                    </div>
+                </div>
 
-            <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-700"></div>
+                <Button 
+                    onClick={handleAdd} 
+                    disabled={!magnetLink} 
+                    fullWidth 
+                    icon={<Magnet size={18} />}
+                >
+                    {t.startBtn}
+                </Button>
+
+                <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-slate-200 dark:border-slate-700"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-surface dark:bg-[#1e1e1e] text-slate-500">{t.or}</span>
+                    </div>
                 </div>
-                <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-surface text-slate-500">{t.or}</span>
-                </div>
+
+                {/* Option B: File Picker */}
+                <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleFileChange} 
+                    accept=".torrent" 
+                    className="hidden" 
+                />
+                
+                <Button 
+                    variant="outline" 
+                    fullWidth 
+                    icon={<FileUp size={18} />}
+                    onClick={handleFileClick}
+                >
+                    {t.fileBtn}
+                </Button>
             </div>
-
-            {/* Option B: File Picker */}
-            <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleFileChange} 
-                accept=".torrent" 
-                className="hidden" 
-            />
-            
-            <Button 
-                variant="outline" 
-                fullWidth 
-                icon={<FileUp size={18} />}
-                onClick={handleFileClick}
-            >
-                {t.fileBtn}
-            </Button>
         </div>
-        
-        <div className="h-4 sm:hidden"></div>
-      </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { Torrent, TorrentStatus, Language } from '../types';
 import { translations } from '../translations';
 import { Play, Pause, Trash2, Download, Upload, Clock, HardDrive } from 'lucide-react';
@@ -10,7 +11,7 @@ interface TorrentCardProps {
   lang: Language;
 }
 
-const TorrentCard: React.FC<TorrentCardProps> = ({ torrent, onToggle, onDelete, lang }) => {
+const TorrentCard: React.FC<TorrentCardProps> = observer(({ torrent, onToggle, onDelete, lang }) => {
   const t = translations[lang];
   const isPaused = torrent.status === TorrentStatus.Paused || torrent.status === TorrentStatus.Error;
   const isCompleted = torrent.progress === 100;
@@ -130,6 +131,6 @@ const TorrentCard: React.FC<TorrentCardProps> = ({ torrent, onToggle, onDelete, 
       </div>
     </div>
   );
-};
+});
 
 export default TorrentCard;
