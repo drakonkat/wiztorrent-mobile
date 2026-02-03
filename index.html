@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>WizTorrent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              background: 'var(--color-bg)',
+              surface: 'var(--color-surface)',
+              surfaceHighlight: 'var(--color-surface-highlight)',
+              primary: 'var(--color-primary)',
+              secondary: 'var(--color-secondary)',
+              // Keep functional colors fixed or adaptable if needed, using standard palette for safety
+              danger: '#EF4444', 
+            },
+            animation: {
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      :root {
+        /* Light Theme */
+        --color-bg: #ffffff;
+        --color-surface: #f4f6ff; /* Very light tint of blue/purple for card surface */
+        --color-surface-highlight: #e0e7ff;
+        --color-primary: #a7aef0;
+        --color-secondary: #a6c0f1;
+      }
+      
+      .dark {
+        /* Dark Theme */
+        --color-bg: #151515;
+        --color-surface: #292929; /* User defined secondary for dark mode used as surface */
+        --color-surface-highlight: #3a3a3a;
+        --color-primary: #a7aef0;
+        --color-secondary: #292929;
+      }
+
+      body {
+        background-color: var(--color-bg);
+        color: #fff; /* Default text color override in component */
+        transition: background-color 0.3s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-surface-highlight);
+        border-radius: 3px;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1?deps=react@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/?deps=react@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?deps=react@18.3.1",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0?deps=react@18.3.1",
+    "mobx": "https://esm.sh/mobx@6.12.0",
+    "mobx-react-lite": "https://esm.sh/mobx-react-lite@4.0.7?deps=react@18.3.1,mobx@6.12.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
